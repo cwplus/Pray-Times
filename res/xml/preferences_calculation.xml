@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen 
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <ListPreference 
+        android:key="@string/keyMethod"
+        android:entryValues="@array/methods_index" 
+        android:entries="@array/methods_names" 
+        android:title="@string/textMethod"
+        android:defaultValue="0"/>
+    
+    <CheckBoxPreference 
+    	android:key="@string/keyUseGPS"
+        android:summaryOff="@string/No" 
+        android:summaryOn="@string/Yes" 
+        android:title="@string/UseGPS"
+        android:defaultValue="true"/>
+	<EditTextPreference 
+	    android:key="@string/keyLongitude"
+	    android:title="@string/Longitude"
+	    android:dialogTitle="@string/Longitude"/>
+	<EditTextPreference 
+	    android:key="@string/keyLatitude"
+	    android:title="@string/Latitude" 
+	    android:dialogTitle="@string/Latitude"/>
+	<EditTextPreference 
+	    android:key="@string/keyElevation"
+	    android:title="@string/Elevation" 
+	    android:dialogTitle="@string/Elevation"/>
+    
+	<CheckBoxPreference 
+    	android:key="@string/keyTimeZone"
+        android:summaryOff="@string/No" 
+        android:summaryOn="@string/Yes" 
+        android:title="@string/AutoTimeZone"
+        android:defaultValue="true"/>
+	<EditTextPreference 
+	    android:key="@string/keyTimeZoneValue"
+	    android:title="@string/TimeZone" 
+	    android:dialogTitle="@string/TimeZoneSelect"/>
+	
+    <ListPreference 
+        android:title="@string/DST" 
+        android:entries="@array/DST_names" 
+        android:entryValues="@array/DST_index"
+        android:defaultValue="0"/>
+
+</PreferenceScreen>
