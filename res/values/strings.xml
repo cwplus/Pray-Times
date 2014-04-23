@@ -1,10 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">PrayTimes</string>
+    <!-- Ключи настроек приложения -->
+    <string name="keyMethod">METHOD</string>
+    <string name="keyUseGPS">USE_GPS</string>
+    <string name="keyLongitude">LONGITUDE</string>
+    <string name="keyLatitude">LATITUDE</string>
+    <string name="keyElevation">ELEVATION</string>
+    <string name="keyTimeZone">TIME_ZONE</string>
+    <string name="keyTimeZoneValue">TIME_ZONE_VALUE</string>
+    <string name="keyDST">DST</string>
+    <!-- Ключи настроек приложения -->
     
-    <string name="preferences">Settings</string>
-    <string name="method">Method</string>
+    <!-- Наименования настроек приложения -->
+    <string name="MethodCalc">Calculation method</string>
+    <string name="UseGPS">Use GPS</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+    
+    <string name="Longitude">Longitude</string>
+    <string name="Latitude">"Latitude"</string>
+    <string name="Elevation">Elevation</string>
+    
+    <string name="TimeZone">Time Zone</string>
+    <string name="AutoTimeZone">Auto Time Zone</string>
+    <string name="TimeZoneSelect">Select Time Zone</string>
+    
+    <string name="DST">Use daylight saving time</string>
+    <!-- 
+    <string name="Auto">Auto</string>
+    <string name="Enabled">Enabled</string>
+    <string name="Disabled">Disabled</string>
+     -->
+     
+    <!-- Наименования настроек приложения -->
+    
+	<string name="app_name">PrayTimes</string>
+    
+	<string name="preferencesCalculation">Settings for calculation</string>
+	<string name="preferencesAlarm">Settings for alarm</string>
+    
+    <string name="textMethod">Method</string>
     
     <string name="textTypeTimeZone">Time Zone</string>
 	<string name="textAutoTimeZone">Auto</string>
@@ -13,17 +48,7 @@
 	<string name="textGPS">Use GPS</string>
 	<string name="textAutoGPS">Auto</string>
 	<string name="textManualGPS">Manual</string>
-	
-	<string name="summary_latitude">Select latitude</string>
-	<string name="title_latitude">Latitude</string>
-	<string name="textLatitude">Latitude</string>
-    <string name="summary_longitude">Select longitude</string>
-	<string name="title_longitude">Longitude</string>
-	<string name="textLongitude">Longitude</string>
-	<string name="summary_elevation">Select elevation</string>
-	<string name="title_elevation">Elevation</string>
-	<string name="textElevation">Elevation</string>
-	
+		
 	<string name="textTypeDST">Use daylight saving time</string>
 	<string name="textAutoDST">Auto</string>
 	<string name="textEnabledDST">Enabled</string>
@@ -32,7 +57,7 @@
 	<string name="textBtnSave">Save</string>
 	
 	
-	<string-array name="methods">
+	<string-array name="methods_names">
 		<item>Muslim World League</item>
 		<item>Islamic Society of North America (ISNA)</item>
 		<item>Egyptian General Authority of Survey</item>
@@ -41,7 +66,7 @@
 		<item>Institute of Geophysics, University of Tehran</item>
 		<item>Shia Ithna-Ashari, Leva Institute, Qum</item>
 	</string-array>
-	<string-array name="methods_values">
+	<string-array name="methods_index">
 		<item>0</item>
 		<item>1</item>
 		<item>2</item>
@@ -51,5 +76,15 @@
 		<item>6</item>
 	</string-array>
     
+    <string-array name="DST_names">
+		<item>Auto</item>
+		<item>Enabled</item>
+		<item>Disabled</item>
+	</string-array>
+	<string-array name="DST_index">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
     
 </resources>

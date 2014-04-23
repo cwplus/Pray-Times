@@ -1,12 +1,10 @@
 package com.koylubaevnt.praytimes.core;
 
-import static com.koylubaevnt.praytimes.core.Configuration.angle;
 import static com.koylubaevnt.praytimes.core.Configuration.minutes;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -143,7 +141,6 @@ public class PrayTimes {
 	// compute mid-day time
 	private double midDay(double time) {
 		double eqt = sunPosition(jDate + time).equation;
-		// System.out.println("eqt = " + eqt);
 		double noon = DMath.fixHour(12 - eqt);
 		return noon;
 	}
@@ -406,65 +403,6 @@ public class PrayTimes {
 	// compute the difference between two times
 	private double timeDiff(double time1, double time2) {
 		return DMath.fixHour(time2 - time1);
-	}
-
-	/* Test drive ----------------------------------------------------------- */
-	// TODO: method sunPosition tidak sama!!!
-	public static void main(String[] args) {
-		double x = sunPosition(2456497.2032515435 + 0.25).equation;
-		System.out.println("X = " + x);
-	}
-
-	public static void main2(String[] args) {
-		PrayTimes pt = new PrayTimes(Method.ISNA);
-		pt.adjust(Time.FAJR, angle(20));
-		pt.adjust(Time.DHUHR, minutes(2));
-		pt.adjust(Time.MAGHRIB, minutes(1));
-		pt.adjust(Time.ISHA, angle(18));
-
-		pt.tuneOffset(Time.FAJR, 2);
-		pt.tuneOffset(Time.SUNRISE, -2);
-		pt.tuneOffset(Time.ASR, 2);
-		pt.tuneOffset(Time.MAGHRIB, 2);
-		pt.tuneOffset(Time.ISHA, 2);
-
-		today(pt);
-
-		if (args.length > 0) {
-			aYear(pt);
-		}
-	}
-
-	private static void aYear(PrayTimes pt) {
-		GregorianCalendar cal = new GregorianCalendar(2011, 0, 1);
-		for (int i = 0; i < 365; i++) {
-			System.out.print("@"
-					+ cal.get(Calendar.DAY_OF_MONTH)
-					+ "-"
-					+ cal.get(Calendar.MONTH) + " = ");
-
-			Map<Time, Double> times = pt.getTimes(cal, new Location(-6.1744444,
-					106.8294444, 10));
-			for (Time t : new Time[] { Time.FAJR, Time.SUNRISE, Time.DHUHR,
-					Time.ASR, Time.MAGHRIB, Time.ISHA, Time.MIDNIGHT }) {
-				System.out
-						.print(t + " : " + Util.toTime12(times.get(t), false));
-				System.out.print(",");
-			}
-			// System.out.println();
-
-			cal.add(Calendar.DAY_OF_MONTH, 1);
-		}
-	}
-
-	private static void today(PrayTimes pt) {
-		Map<Time, Double> times = pt.getTimes(new GregorianCalendar(),
-				new Location(-6.1744444, 106.8294444, 10));
-
-		for (Time t : new Time[] { Time.FAJR, Time.SUNRISE, Time.DHUHR,
-				Time.ASR, Time.MAGHRIB, Time.ISHA, Time.MIDNIGHT }) {
-			System.out.println(t + " : " + Util.toTime12(times.get(t), false));
-		}
 	}
 
 	public void adjust(Map<Time, Configuration> adjustments) {

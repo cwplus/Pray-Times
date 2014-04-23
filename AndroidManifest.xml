@@ -22,8 +22,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.koylubaevnt.praytimes.PreferencesScreen"
-            android:label="@string/preferences" >
+            android:name="com.koylubaevnt.praytimes.preferences.PreferencesCalculationScreen"
+            android:label="@string/preferencesCalculation" >
+        </activity>
+        
+        <activity
+            android:name="com.koylubaevnt.praytimes.preferences.PreferencesAlarmScreens"
+            android:label="@string/preferencesAlarm" >
         </activity>
     </application>
 
