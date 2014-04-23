@@ -3,13 +3,19 @@ package com.koylubaevnt.praytimes.preferences;
 import com.koylubaevnt.praytimes.R;
 
 import android.annotation.TargetApi;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
+import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
+import android.preference.PreferenceManager;
 
-public class PreferencesCalculationScreen extends PreferenceActivity implements Preference.OnPreferenceChangeListener{
+public class PreferencesCalculationScreen extends PreferenceActivity implements OnSharedPreferenceChangeListener{
 	  @Override
 	  protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -21,31 +27,73 @@ public class PreferencesCalculationScreen extends PreferenceActivity implements 
 	  }
 	  
 	  /**
-	     * Wraps legacy {@link #onCreate(Bundle)} code for Android < 3 (i.e. API lvl
-	     * < 11).
+	     * Wraps legacy {@link #onCreate(Bundle)} code for Android < 3 (i.e. API lvl < 11).
 	     */
 	    @SuppressWarnings("deprecation")
 	    private void onCreatePreferenceActivity() {
 	        addPreferencesFromResource(R.xml.preferences_calculation);
-	        ListPreference method = (ListPreference)this.findPreference(getResources().getString(R.string.keyMethod));
-	        method.setSummary(method.getEntry());
-	        method.setOnPreferenceChangeListener(this);
+	        
+	        PreferenceManager.setDefaultValues(this, R.xml.preferences_calculation, false);
+	        for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++) {
+	            initSummary(getPreferenceScreen().getPreference(i));
+	        }
 	    }
 
-	    
-	    public boolean onPreferenceChange(Preference preference, Object newValue)
-	    {
-	    	if (preference instanceof ListPreference) {
-				preference.setSummary(((ListPreference) preference).getEntry());
-			}else
-				preference.setSummary((CharSequence)newValue);
+	    @Override
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+			updatePrefSummary(findPreference(key));
+		}
 
-	        return true;
+
+		@Override
+		public void onPause() {
+			super.onPause();
+			// Unregister the listener whenever a key changes
+	        getPreferenceScreen().getSharedPreferences()
+	                .unregisterOnSharedPreferenceChangeListener(this);
+		}
+
+		@Override
+		public void onResume() {
+			super.onResume();
+	        // Set up a listener whenever a key changes
+	        getPreferenceScreen().getSharedPreferences()
+	                .registerOnSharedPreferenceChangeListener(this);
+		}
+
+		private void initSummary(Preference p) {
+	        if (p instanceof PreferenceCategory) {
+	            PreferenceCategory pCat = (PreferenceCategory) p;
+	            for (int i = 0; i < pCat.getPreferenceCount(); i++) {
+	                initSummary(pCat.getPreference(i));
+	            }
+	        } else {
+	            updatePrefSummary(p);
+	        }
 	    }
-	    
+		
+
+		private void updatePrefSummary(Preference p) {
+	        if (p instanceof ListPreference) {
+	            ListPreference listPref = (ListPreference) p;
+	            p.setSummary(listPref.getEntry());
+	        }
+	        if (p instanceof EditTextPreference) {
+	            EditTextPreference editTextPref = (EditTextPreference) p;
+	            if (p.getTitle().toString().contains("assword"))
+	            {
+	                p.setSummary("******");
+	            } else {
+	                p.setSummary(editTextPref.getText());
+	            }
+	        }
+	        if (p instanceof MultiSelectListPreference) {
+	            EditTextPreference editTextPref = (EditTextPreference) p;
+	            p.setSummary(editTextPref.getText());
+	        }
+	    }
 	    /**
-	     * Wraps {@link #onCreate(Bundle)} code for Android >= 3 (i.e. API lvl >=
-	     * 11).
+	     * Wraps {@link #onCreate(Bundle)} code for Android >= 3 (i.e. API lvl >= 11).
 	     */
 	    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	    private void onCreatePreferenceFragment() {

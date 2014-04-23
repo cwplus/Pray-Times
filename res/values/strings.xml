@@ -37,17 +37,57 @@
      -->
      
     <!-- Ключи настроек "Будильника" -->
+    <string name="keyAlarmBefore">ALARM_BEFORE</string>
+    <string name="keyAlarmBeforeRington">ALARM_BEFORE_RINGTON</string>
+    <string name="keyAlarmBeforeVibro">ALARM_BEFORE_VIBRO</string>
     <string name="keyAlarm">ALARM</string>
+    <string name="keyAlarmRington">ALARM_RINGTON</string>
+    <string name="keyAlarmVibro">ALARM_VIBRO</string>
     <!-- Ключи настроек "Будильника" -->
     
     <!-- Наименования настроек "Будильника" -->
-    <string name="UseAlarm">Use alarm</string>
+    <string name="AlarmBefore">Alarm before</string>
+    <string name="Alarm">Alarm</string>
+    <string name="UseAlarmNow">Alarm now</string>
+    <string name="Rington">Rington</string>
+    <string name="Vibration">Vibration</string>
+    <string name="Enabled">Enabled</string>
+    <string name="Disabled">Disabled</string>
+    
+    <string-array name="reminder_names">
+		<item>before 5 minutes</item>
+		<item>before 10 minutes</item>
+		<item>before 15 minutes</item>
+		<item>before 20 minutes</item>
+		<item>before 25 minutes</item>
+		<item>before 30 minutes</item>
+		<item>before 35 minutes</item>
+		<item>before 40 minutes</item>
+		<item>before 45 minutes</item>
+		<item>before 50 minutes</item>
+		<item>before 55 minutes</item>
+		<item>before 60 minutes</item>
+	</string-array>
+	<string-array name="reminder_index">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+		<item>8</item>
+		<item>9</item>
+		<item>10</item>
+		<item>11</item>
+	</string-array>
     <!-- Наименования настроек "Будильника" -->
     
     <string name="preferencesCalculation">Settings for calculation</string>
 	<string name="preferencesAlarm">Settings for alarm</string>
     
-    <string name="textMethod">Method</string>
+    <string name="Method">Method</string>
     
     <string name="textTypeTimeZone">Time Zone</string>
 	<string name="textAutoTimeZone">Auto</string>

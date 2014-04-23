@@ -6,8 +6,8 @@
         android:key="@string/keyMethod"
         android:entryValues="@array/methods_index" 
         android:entries="@array/methods_names" 
-        android:title="@string/textMethod"
-        android:defaultValue="0"/>
+        android:title="@string/Method"
+        android:defaultValue="0" android:dialogTitle="@string/Method"/>
     
     <CheckBoxPreference 
     	android:key="@string/keyUseGPS"
@@ -50,6 +50,6 @@
         android:title="@string/DST" 
         android:entries="@array/DST_names" 
         android:entryValues="@array/DST_index"
-        android:defaultValue="0"/>
+        android:defaultValue="0" android:key="@string/keyDST" android:dialogTitle="@string/DST"/>
 
 </PreferenceScreen>
