@@ -2,7 +2,6 @@ package com.koylubaevnt.praytimes.preferences;
 
 import com.koylubaevnt.praytimes.R;
 
-
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,8 +35,11 @@ public class PreferencesCalculationScreen extends PreferenceActivity implements 
 	    
 	    public boolean onPreferenceChange(Preference preference, Object newValue)
 	    {
-	        preference.setSummary((CharSequence)newValue);
-	 
+	    	if (preference instanceof ListPreference) {
+				preference.setSummary(((ListPreference) preference).getEntry());
+			}else
+				preference.setSummary((CharSequence)newValue);
+
 	        return true;
 	    }
 	    

@@ -14,30 +14,37 @@
         android:summaryOff="@string/No" 
         android:summaryOn="@string/Yes" 
         android:title="@string/UseGPS"
-        android:defaultValue="true"/>
+        android:defaultValue="true"
+        android:disableDependentsState="true"/>
 	<EditTextPreference 
 	    android:key="@string/keyLongitude"
 	    android:title="@string/Longitude"
-	    android:dialogTitle="@string/Longitude" android:dependency="@string/keyUseGPS"/>
+	    android:dialogTitle="@string/Longitude" 
+	    android:dependency="@string/keyUseGPS"/>
 	<EditTextPreference 
 	    android:key="@string/keyLatitude"
 	    android:title="@string/Latitude" 
-	    android:dialogTitle="@string/Latitude" android:dependency="@string/keyUseGPS"/>
+	    android:dialogTitle="@string/Latitude" 
+	    android:dependency="@string/keyUseGPS"/>
 	<EditTextPreference 
 	    android:key="@string/keyElevation"
 	    android:title="@string/Elevation" 
-	    android:dialogTitle="@string/Elevation" android:dependency="@string/keyUseGPS"/>
+	    android:dialogTitle="@string/Elevation" 
+	    android:dependency="@string/keyUseGPS"/>
     
 	<CheckBoxPreference 
     	android:key="@string/keyTimeZone"
         android:summaryOff="@string/No" 
         android:summaryOn="@string/Yes" 
         android:title="@string/AutoTimeZone"
-        android:defaultValue="true"/>
+        android:defaultValue="true"
+        android:disableDependentsState="true"
+        />
 	<EditTextPreference 
 	    android:key="@string/keyTimeZoneValue"
 	    android:title="@string/TimeZone" 
-	    android:dialogTitle="@string/TimeZoneSelect" android:dependency="@string/keyTimeZone"/>
+	    android:dialogTitle="@string/TimeZoneSelect" 
+	    android:dependency="@string/keyTimeZone"/>
 	
     <ListPreference 
         android:title="@string/DST" 

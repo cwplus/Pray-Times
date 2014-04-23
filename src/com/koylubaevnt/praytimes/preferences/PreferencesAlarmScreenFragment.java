@@ -16,16 +16,15 @@ public class PreferencesAlarmScreenFragment extends PreferenceFragment implement
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences_alarm);
-		ListPreference method = (ListPreference)this.findPreference(getResources().getString(R.string.keyMethod));
-        method.setSummary(method.getEntry());
-        method.setOnPreferenceChangeListener(this);
 	}
 
 	@Override
 	public boolean onPreferenceChange(Preference preference, Object newValue)
     {
-        preference.setSummary((CharSequence)newValue);
- 
-        return true;
+		if (preference instanceof ListPreference) {
+			preference.setSummary(((ListPreference) preference).getEntry());
+		}else
+			preference.setSummary((CharSequence)newValue);
+    	return true;
     }
 }

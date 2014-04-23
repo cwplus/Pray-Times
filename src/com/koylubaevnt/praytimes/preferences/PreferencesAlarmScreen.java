@@ -27,17 +27,16 @@ public class PreferencesAlarmScreen extends PreferenceActivity implements Prefer
 	    @SuppressWarnings("deprecation")
 	    private void onCreatePreferenceActivity() {
 	        addPreferencesFromResource(R.xml.preferences_alarm);
-	        ListPreference method = (ListPreference)this.findPreference(getResources().getString(R.string.keyMethod));
-	        method.setSummary(method.getEntry());
-	        method.setOnPreferenceChangeListener(this);
 	    }
 
 	    
 	    public boolean onPreferenceChange(Preference preference, Object newValue)
 	    {
-	        preference.setSummary((CharSequence)newValue);
-	 
-	        return true;
+	    	if (preference instanceof ListPreference) {
+				preference.setSummary(((ListPreference) preference).getEntry());
+			}else
+				preference.setSummary((CharSequence)newValue);
+	    	return true;
 	    }
 	    
 	    /**
@@ -47,7 +46,7 @@ public class PreferencesAlarmScreen extends PreferenceActivity implements Prefer
 	    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	    private void onCreatePreferenceFragment() {
 	        getFragmentManager().beginTransaction()
-	                .replace(android.R.id.content, new PreferencesCalculationScreenFragment())
+	                .replace(android.R.id.content, new PreferencesAlarmScreenFragment())
 	                .commit();
 	    }
 }

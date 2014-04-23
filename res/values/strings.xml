@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Ключи настроек приложения -->
+    <!-- Наименование приложения -->
+    <string name="app_name">PrayTimes</string>
+        
+    <!-- Ключи настроек "Расчета" -->
     <string name="keyMethod">METHOD</string>
     <string name="keyUseGPS">USE_GPS</string>
     <string name="keyLongitude">LONGITUDE</string>
@@ -9,9 +12,9 @@
     <string name="keyTimeZone">TIME_ZONE</string>
     <string name="keyTimeZoneValue">TIME_ZONE_VALUE</string>
     <string name="keyDST">DST</string>
-    <!-- Ключи настроек приложения -->
+    <!-- Ключи настроек "Расчета" -->
     
-    <!-- Наименования настроек приложения -->
+    <!-- Наименования настроек "Расчета" -->
     <string name="MethodCalc">Calculation method</string>
     <string name="UseGPS">Use GPS</string>
     <string name="Yes">Yes</string>
@@ -26,17 +29,22 @@
     <string name="TimeZoneSelect">Select Time Zone</string>
     
     <string name="DST">Use daylight saving time</string>
+    <!-- Наименования настроек "Расчета" -->
     <!-- 
     <string name="Auto">Auto</string>
     <string name="Enabled">Enabled</string>
     <string name="Disabled">Disabled</string>
      -->
      
-    <!-- Наименования настроек приложения -->
+    <!-- Ключи настроек "Будильника" -->
+    <string name="keyAlarm">ALARM</string>
+    <!-- Ключи настроек "Будильника" -->
     
-	<string name="app_name">PrayTimes</string>
+    <!-- Наименования настроек "Будильника" -->
+    <string name="UseAlarm">Use alarm</string>
+    <!-- Наименования настроек "Будильника" -->
     
-	<string name="preferencesCalculation">Settings for calculation</string>
+    <string name="preferencesCalculation">Settings for calculation</string>
 	<string name="preferencesAlarm">Settings for alarm</string>
     
     <string name="textMethod">Method</string>

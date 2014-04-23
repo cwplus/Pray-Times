@@ -27,7 +27,7 @@
         </activity>
         
         <activity
-            android:name="com.koylubaevnt.praytimes.preferences.PreferencesAlarmScreens"
+            android:name="com.koylubaevnt.praytimes.preferences.PreferencesAlarmScreen"
             android:label="@string/preferencesAlarm" >
         </activity>
     </application>

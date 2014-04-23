@@ -24,8 +24,12 @@ public class PreferencesCalculationScreenFragment extends PreferenceFragment imp
 	@Override
 	public boolean onPreferenceChange(Preference preference, Object newValue)
     {
-        preference.setSummary((CharSequence)newValue);
- 
+		if (preference instanceof ListPreference) {
+			ListPreference listPref = (ListPreference) preference;
+			preference.setSummary(listPref.getEntry());
+		}else
+			preference.setSummary((CharSequence)newValue);
+
         return true;
     }
 }
