@@ -33,18 +33,20 @@ public class PreferencesCalculationScreen extends PreferenceActivity implements 
 	    private void onCreatePreferenceActivity() {
 	        addPreferencesFromResource(R.xml.preferences_calculation);
 	        
-	        PreferenceManager.setDefaultValues(this, R.xml.preferences_calculation, false);
+/*	        PreferenceManager.setDefaultValues(this, R.xml.preferences_calculation, false);
 	        for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++) {
 	            initSummary(getPreferenceScreen().getPreference(i));
-	        }
+	        }*/
 	    }
 
-	    @Override
+	    @SuppressWarnings("deprecation")
+		@Override
 		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 			updatePrefSummary(findPreference(key));
 		}
 
 
+		@SuppressWarnings("deprecation")
 		@Override
 		public void onPause() {
 			super.onPause();
@@ -53,6 +55,7 @@ public class PreferencesCalculationScreen extends PreferenceActivity implements 
 	                .unregisterOnSharedPreferenceChangeListener(this);
 		}
 
+		@SuppressWarnings("deprecation")
 		@Override
 		public void onResume() {
 			super.onResume();
@@ -60,7 +63,7 @@ public class PreferencesCalculationScreen extends PreferenceActivity implements 
 	        getPreferenceScreen().getSharedPreferences()
 	                .registerOnSharedPreferenceChangeListener(this);
 		}
-
+		/*
 		private void initSummary(Preference p) {
 	        if (p instanceof PreferenceCategory) {
 	            PreferenceCategory pCat = (PreferenceCategory) p;
@@ -71,7 +74,7 @@ public class PreferencesCalculationScreen extends PreferenceActivity implements 
 	            updatePrefSummary(p);
 	        }
 	    }
-		
+		*/
 
 		private void updatePrefSummary(Preference p) {
 	        if (p instanceof ListPreference) {
@@ -87,10 +90,10 @@ public class PreferencesCalculationScreen extends PreferenceActivity implements 
 	                p.setSummary(editTextPref.getText());
 	            }
 	        }
-	        if (p instanceof MultiSelectListPreference) {
+	        /*if (p instanceof MultiSelectListPreference) {
 	            EditTextPreference editTextPref = (EditTextPreference) p;
 	            p.setSummary(editTextPref.getText());
-	        }
+	        }*/
 	    }
 	    /**
 	     * Wraps {@link #onCreate(Bundle)} code for Android >= 3 (i.e. API lvl >= 11).

@@ -54,7 +54,7 @@ public class PreferencesCalculationScreenFragment extends PreferenceFragment imp
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
 	}
-
+	/*
 	private void initSummary(Preference p) {
         if (p instanceof PreferenceCategory) {
             PreferenceCategory pCat = (PreferenceCategory) p;
@@ -65,6 +65,7 @@ public class PreferencesCalculationScreenFragment extends PreferenceFragment imp
             updatePrefSummary(p);
         }
     }
+	*/
 	
 	private void updatePrefSummary(Preference p) {
         if (p instanceof ListPreference) {
