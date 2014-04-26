@@ -7,8 +7,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 public class StartScreen extends Activity {
 
@@ -32,7 +30,8 @@ public class StartScreen extends Activity {
 		menu.add(0, 1, 0, getResources().getString(R.string.preferencesCalculation)).setIntent(new Intent(this, PreferencesCalculationScreen.class));
 	    
 	    menu.add(0, 2, 1, getResources().getString(R.string.preferencesAlarm)).setIntent(new Intent(this, PreferencesAlarmScreen.class));
-		return super.onCreateOptionsMenu(menu);
+	    
+	    return super.onCreateOptionsMenu(menu);
 	}
 
 }

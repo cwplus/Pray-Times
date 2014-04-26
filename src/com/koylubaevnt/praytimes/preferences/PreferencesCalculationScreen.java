@@ -1,107 +1,186 @@
 package com.koylubaevnt.praytimes.preferences;
 
+import java.util.List;
+
 import com.koylubaevnt.praytimes.R;
 
 import android.annotation.TargetApi;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
-import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.RingtonePreference;
+import android.text.TextUtils;
 
-public class PreferencesCalculationScreen extends PreferenceActivity implements OnSharedPreferenceChangeListener{
-	  @Override
-	  protected void onCreate(Bundle savedInstanceState) {
-	    super.onCreate(savedInstanceState);
-	    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            onCreatePreferenceActivity();
-        } else {
-            onCreatePreferenceFragment();
-        }
-	  }
-	  
-	  /**
-	     * Wraps legacy {@link #onCreate(Bundle)} code for Android < 3 (i.e. API lvl < 11).
-	     */
-	    @SuppressWarnings("deprecation")
-	    private void onCreatePreferenceActivity() {
-	        addPreferencesFromResource(R.xml.preferences_calculation);
-	        
-/*	        PreferenceManager.setDefaultValues(this, R.xml.preferences_calculation, false);
-	        for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++) {
-	            initSummary(getPreferenceScreen().getPreference(i));
-	        }*/
-	    }
+public class PreferencesCalculationScreen extends PreferenceActivity {
+	private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
-	    @SuppressWarnings("deprecation")
-		@Override
-		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-			updatePrefSummary(findPreference(key));
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+
+		setupSimplePreferencesScreen();
+	}
+
+	@SuppressWarnings("deprecation")
+	private void setupSimplePreferencesScreen() {
+		if (!isSimplePreferences(this)) {
+			return;
 		}
 
+		// Add 'alarm' preferences.
+		addPreferencesFromResource(R.xml.preferences_calculation);
 
-		@SuppressWarnings("deprecation")
-		@Override
-		public void onPause() {
-			super.onPause();
-			// Unregister the listener whenever a key changes
-	        getPreferenceScreen().getSharedPreferences()
-	                .unregisterOnSharedPreferenceChangeListener(this);
+		// Bind the summaries of EditText/List/Dialog/Ringtone preferences to
+		// their values. When their values change, their summaries are updated
+		// to reflect the new value, per the Android Design guidelines.
+	    Resources r = getResources();
+	    
+	    bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyMethod)));
+	    bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyLongitude)));
+		bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyLatitude)));
+		bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyElevation)));
+		bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyTimeZoneValue)));
+		bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyDST)));
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean onIsMultiPane() {
+		return isXLargeTablet(this) && !isSimplePreferences(this);
+	}
+
+	/**
+	 * Helper method to determine if the device has an extra-large screen. For
+	 * example, 10" tablets are extra-large.
+	 */
+	private static boolean isXLargeTablet(Context context) {
+		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
+	}
+
+	private static boolean isSimplePreferences(Context context) {
+		return ALWAYS_SIMPLE_PREFS
+				|| Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
+				|| !isXLargeTablet(context);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public void onBuildHeaders(List<Header> target) {
+		if (!isSimplePreferences(this)) {
+			loadHeadersFromResource(R.xml.pref_headers, target);
 		}
+	}
 
-		@SuppressWarnings("deprecation")
+	/**
+	 * A preference value change listener that updates the preference's summary
+	 * to reflect its new value.
+	 */
+	private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
 		@Override
-		public void onResume() {
-			super.onResume();
-	        // Set up a listener whenever a key changes
-	        getPreferenceScreen().getSharedPreferences()
-	                .registerOnSharedPreferenceChangeListener(this);
-		}
-		/*
-		private void initSummary(Preference p) {
-	        if (p instanceof PreferenceCategory) {
-	            PreferenceCategory pCat = (PreferenceCategory) p;
-	            for (int i = 0; i < pCat.getPreferenceCount(); i++) {
-	                initSummary(pCat.getPreference(i));
-	            }
-	        } else {
-	            updatePrefSummary(p);
-	        }
-	    }
-		*/
+		public boolean onPreferenceChange(Preference preference, Object value) {
+			String stringValue = value.toString();
 
-		private void updatePrefSummary(Preference p) {
-	        if (p instanceof ListPreference) {
-	            ListPreference listPref = (ListPreference) p;
-	            p.setSummary(listPref.getEntry());
-	        }
-	        if (p instanceof EditTextPreference) {
-	            EditTextPreference editTextPref = (EditTextPreference) p;
-	            if (p.getTitle().toString().contains("assword"))
-	            {
-	                p.setSummary("******");
-	            } else {
-	                p.setSummary(editTextPref.getText());
-	            }
-	        }
-	        /*if (p instanceof MultiSelectListPreference) {
-	            EditTextPreference editTextPref = (EditTextPreference) p;
-	            p.setSummary(editTextPref.getText());
-	        }*/
-	    }
-	    /**
-	     * Wraps {@link #onCreate(Bundle)} code for Android >= 3 (i.e. API lvl >= 11).
-	     */
-	    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	    private void onCreatePreferenceFragment() {
-	        getFragmentManager().beginTransaction()
-	                .replace(android.R.id.content, new PreferencesCalculationScreenFragment())
-	                .commit();
-	    }
+			if (preference instanceof ListPreference) {
+				// For list preferences, look up the correct display value in
+				// the preference's 'entries' list.
+				ListPreference listPreference = (ListPreference) preference;
+				int index = listPreference.findIndexOfValue(stringValue);
+
+				// Set the summary to reflect the new value.
+				preference
+						.setSummary(index >= 0 ? listPreference.getEntries()[index]
+								: null);
+
+			} else if (preference instanceof RingtonePreference) {
+				// For ringtone preferences, look up the correct display value
+				// using RingtoneManager.
+				if (TextUtils.isEmpty(stringValue)) {
+					// Empty values correspond to 'silent' (no ringtone).
+					preference.setSummary(R.string.pref_ringtone_none);
+
+				} else {
+					Ringtone ringtone = RingtoneManager.getRingtone(
+							preference.getContext(), Uri.parse(stringValue));
+
+					if (ringtone == null) {
+						// Clear the summary if there was a lookup error.
+						preference.setSummary(null);
+					} else {
+						// Set the summary to reflect the new ringtone display
+						// name.
+						String name = ringtone
+								.getTitle(preference.getContext());
+						preference.setSummary(name);
+					}
+				}
+
+			} else {
+				// For all other preferences, set the summary to the value's
+				// simple string representation.
+				preference.setSummary(stringValue);
+			}
+			return true;
+		}
+	};
+
+	/**
+	 * Binds a preference's summary to its value. More specifically, when the
+	 * preference's value is changed, its summary (line of text below the
+	 * preference title) is updated to reflect the value. The summary is also
+	 * immediately updated upon calling this method. The exact display format is
+	 * dependent on the type of preference.
+	 * 
+	 * @see #sBindPreferenceSummaryToValueListener
+	 */
+	private static void bindPreferenceSummaryToValue(Preference preference) {
+		// Set the listener to watch for value changes.
+		preference
+				.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+
+		// Trigger the listener immediately with the preference's
+		// current value.
+		sBindPreferenceSummaryToValueListener.onPreferenceChange(
+				preference,
+				PreferenceManager.getDefaultSharedPreferences(
+						preference.getContext()).getString(preference.getKey(),
+						""));
+	}
+
+	/**
+	 * This fragment shows general preferences only. It is used when the
+	 * activity is showing a two-pane settings UI.
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public static class GeneralPreferenceFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			// Add 'alarm' preferences.
+			addPreferencesFromResource(R.xml.preferences_calculation);
+
+			// Bind the summaries of EditText/List/Dialog/Ringtone preferences
+			// to their values. When their values change, their summaries are
+			// updated to reflect the new value, per the Android Design
+			// guidelines.
+			Resources r = getResources();
+			
+			bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyMethod)));
+		    bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyLongitude)));
+			bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyLatitude)));
+			bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyElevation)));
+			bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyTimeZoneValue)));
+			bindPreferenceSummaryToValue(findPreference(r.getString(R.string.DST)));
+		}
+	}
 }

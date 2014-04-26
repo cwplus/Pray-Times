@@ -30,6 +30,7 @@
             android:name="com.koylubaevnt.praytimes.preferences.PreferencesAlarmScreen"
             android:label="@string/preferencesAlarm" >
         </activity>
+        
     </application>
 
 </manifest>

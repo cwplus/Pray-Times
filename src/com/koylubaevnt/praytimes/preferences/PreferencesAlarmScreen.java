@@ -1,67 +1,180 @@
 package com.koylubaevnt.praytimes.preferences;
 
+import java.util.List;
+
 import com.koylubaevnt.praytimes.R;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.text.TextUtils;
 
-public class PreferencesAlarmScreen extends PreferenceActivity implements Preference.OnPreferenceChangeListener{
-	  @Override
-	  protected void onCreate(Bundle savedInstanceState) {
-	    super.onCreate(savedInstanceState);
-	    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            onCreatePreferenceActivity();
-        } else {
-            onCreatePreferenceFragment();
-        }
-	  }
-	  
-	  /**
-	     * Wraps legacy {@link #onCreate(Bundle)} code for Android < 3 (i.e. API lvl < 11).
-	     */
-	    @SuppressWarnings("deprecation")
-	    private void onCreatePreferenceActivity() {
-	        addPreferencesFromResource(R.xml.preferences_alarm);
-	        
-	        ListPreference alarmBefore = (ListPreference)this.findPreference(getResources().getString(R.string.keyAlarmBefore));
-			alarmBefore.setSummary(alarmBefore.getEntry());
-			alarmBefore.setOnPreferenceChangeListener(this);
-			
-			RingtonePreference rington = (RingtonePreference)this.findPreference(getResources().getString(R.string.keyAlarmBeforeRington));
-			rington.setSummary(rington.getTitle());
-			rington.setOnPreferenceChangeListener(this);
-			
-			rington = (RingtonePreference)this.findPreference(getResources().getString(R.string.keyAlarmRington));
-			rington.setSummary(rington.getTitle());
-			rington.setOnPreferenceChangeListener(this);
-	    }
+public class PreferencesAlarmScreen extends PreferenceActivity {
+	private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+
+		setupSimplePreferencesScreen();
+	}
+
+	@SuppressWarnings("deprecation")
+	private void setupSimplePreferencesScreen() {
+		if (!isSimplePreferences(this)) {
+			return;
+		}
+
+		// Add 'alarm' preferences.
+		addPreferencesFromResource(R.xml.preferences_alarm);
+
+		// Bind the summaries of EditText/List/Dialog/Ringtone preferences to
+		// their values. When their values change, their summaries are updated
+		// to reflect the new value, per the Android Design guidelines.
+	    Resources r = getResources();
 	    
-	    public boolean onPreferenceChange(Preference preference, Object newValue)
-	    {
-	    	if (preference instanceof ListPreference) {
-				preference.setSummary(((ListPreference) preference).getEntry());
-			}else if (preference instanceof RingtonePreference) {
-				//preference.setSummary(((RingtonePreference) preference).get);
-				//как-то надо тут считать название песни
-				//а в настройках, как-то добавить выбор любой музыки!
-			}else				
-				preference.setSummary((CharSequence)newValue);
-	    	return true;
-	    }
-	    
-	    /**
-	     * Wraps {@link #onCreate(Bundle)} code for Android >= 3 (i.e. API lvl >= 11).
-	     */
-	    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	    private void onCreatePreferenceFragment() {
-	        getFragmentManager().beginTransaction()
-	                .replace(android.R.id.content, new PreferencesAlarmScreenFragment())
-	                .commit();
-	    }
+	    bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyAlarmBeforeList)));
+	    bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyAlarmBeforeRington)));
+		bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyAlarmRington)));
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean onIsMultiPane() {
+		return isXLargeTablet(this) && !isSimplePreferences(this);
+	}
+
+	/**
+	 * Helper method to determine if the device has an extra-large screen. For
+	 * example, 10" tablets are extra-large.
+	 */
+	private static boolean isXLargeTablet(Context context) {
+		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
+	}
+
+	private static boolean isSimplePreferences(Context context) {
+		return ALWAYS_SIMPLE_PREFS
+				|| Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
+				|| !isXLargeTablet(context);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public void onBuildHeaders(List<Header> target) {
+		if (!isSimplePreferences(this)) {
+			loadHeadersFromResource(R.xml.pref_headers, target);
+		}
+	}
+
+	/**
+	 * A preference value change listener that updates the preference's summary
+	 * to reflect its new value.
+	 */
+	private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+		@Override
+		public boolean onPreferenceChange(Preference preference, Object value) {
+			String stringValue = value.toString();
+
+			if (preference instanceof ListPreference) {
+				// For list preferences, look up the correct display value in
+				// the preference's 'entries' list.
+				ListPreference listPreference = (ListPreference) preference;
+				int index = listPreference.findIndexOfValue(stringValue);
+
+				// Set the summary to reflect the new value.
+				preference
+						.setSummary(index >= 0 ? listPreference.getEntries()[index]
+								: null);
+
+			} else if (preference instanceof RingtonePreference) {
+				// For ringtone preferences, look up the correct display value
+				// using RingtoneManager.
+				if (TextUtils.isEmpty(stringValue)) {
+					// Empty values correspond to 'silent' (no ringtone).
+					preference.setSummary(R.string.pref_ringtone_none);
+
+				} else {
+					Ringtone ringtone = RingtoneManager.getRingtone(
+							preference.getContext(), Uri.parse(stringValue));
+
+					if (ringtone == null) {
+						// Clear the summary if there was a lookup error.
+						preference.setSummary(null);
+					} else {
+						// Set the summary to reflect the new ringtone display
+						// name.
+						String name = ringtone
+								.getTitle(preference.getContext());
+						preference.setSummary(name);
+					}
+				}
+
+			} else {
+				// For all other preferences, set the summary to the value's
+				// simple string representation.
+				preference.setSummary(stringValue);
+			}
+			return true;
+		}
+	};
+
+	/**
+	 * Binds a preference's summary to its value. More specifically, when the
+	 * preference's value is changed, its summary (line of text below the
+	 * preference title) is updated to reflect the value. The summary is also
+	 * immediately updated upon calling this method. The exact display format is
+	 * dependent on the type of preference.
+	 * 
+	 * @see #sBindPreferenceSummaryToValueListener
+	 */
+	private static void bindPreferenceSummaryToValue(Preference preference) {
+		// Set the listener to watch for value changes.
+		preference
+				.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+
+		// Trigger the listener immediately with the preference's
+		// current value.
+		sBindPreferenceSummaryToValueListener.onPreferenceChange(
+				preference,
+				PreferenceManager.getDefaultSharedPreferences(
+						preference.getContext()).getString(preference.getKey(),
+						""));
+	}
+
+	/**
+	 * This fragment shows general preferences only. It is used when the
+	 * activity is showing a two-pane settings UI.
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public static class GeneralPreferenceFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			// Add 'alarm' preferences.
+			addPreferencesFromResource(R.xml.preferences_alarm);
+
+			// Bind the summaries of EditText/List/Dialog/Ringtone preferences
+			// to their values. When their values change, their summaries are
+			// updated to reflect the new value, per the Android Design
+			// guidelines.
+			Resources r = getResources();
+			
+			bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyAlarmBefore)));
+		    bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyAlarmBeforeRington)));
+			bindPreferenceSummaryToValue(findPreference(r.getString(R.string.keyAlarmRington)));
+		}
+	}
 }

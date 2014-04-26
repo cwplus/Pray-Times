@@ -1,31 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen 
     xmlns:android="http://schemas.android.com/apk/res/android" >
+    <CheckBoxPreference 
+        android:key="@string/keyAlarmBefore" 
+        android:title="@string/UseAlarmBefore" 
+        android:disableDependentsState="false" 
+        android:summaryOff="@string/No" 
+        android:summaryOn="@string/Yes"/>
     <ListPreference 
         android:entries="@array/reminder_names" 
         android:entryValues="@array/reminder_index" 
-        android:key="@string/keyAlarmBefore" 
-        android:title="@string/AlarmBefore" android:dialogTitle="@string/AlarmBefore"/>
-    <RingtonePreference android:showDefault="true" android:showSilent="false" android:title="@string/Rington" android:key="@string/keyAlarmBeforeRington" android:ringtoneType="ringtone|alarm"/>
+        android:key="@string/keyAlarmBeforeList" 
+        android:title="@string/AlarmBefore" 
+        android:dialogTitle="@string/AlarmBefore" 
+        android:dependency="@string/keyAlarmBefore" android:defaultValue="0"/>
+    <RingtonePreference 
+        android:title="@string/Rington" 
+        android:key="@string/keyAlarmBeforeRington" 
+        android:ringtoneType="ringtone|notification|alarm|all" 
+        android:dependency="@string/keyAlarmBefore"/>
     <CheckBoxPreference 
         android:summaryOff="@string/Disabled" 
         android:summaryOn="@string/Enabled" 
         android:title="@string/Vibration" 
-        android:key="@string/keyAlarmBeforeVibro"/>
+        android:key="@string/keyAlarmBeforeVibro" 
+        android:dependency="@string/keyAlarmBefore"/>
     <CheckBoxPreference 
         android:key="@string/keyAlarm" 
         android:summaryOn="@string/Yes" 
         android:summaryOff="@string/No" 
         android:title="@string/UseAlarmNow" 
         android:disableDependentsState="false"/>
-    <RingtonePreference android:ringtoneType="ringtone|alarm" android:showDefault="true" android:showSilent="false" android:title="@string/Rington" android:key="@string/keyAlarmRington" android:dependency="@string/keyAlarm"/>
+    <RingtonePreference 
+        android:ringtoneType="ringtone|alarm" 
+        android:title="@string/Rington" 
+        android:key="@string/keyAlarmRington" 
+        android:dependency="@string/keyAlarm"/>
     <CheckBoxPreference 
         android:summaryOff="@string/Disabled" 
         android:summaryOn="@string/Enabled" 
         android:title="@string/Vibration" 
-        android:key="@string/keyAlarmVibro" android:dependency="@string/keyAlarm"/>
-    
-    
-    
-
+        android:key="@string/keyAlarmVibro" 
+        android:dependency="@string/keyAlarm"/>
 </PreferenceScreen>
