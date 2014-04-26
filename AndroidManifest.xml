@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="14" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:allowBackup="true"
@@ -31,6 +32,24 @@
             android:label="@string/preferencesAlarm" >
         </activity>
         
+        <activity
+            android:name="com.koylubaevnt.praytimes.compas.QiblaLocator"
+            android:label="@string/qiblaLocator" >
+        </activity>
+        
+        <activity
+            android:name="com.koylubaevnt.praytimes.TableCalculatorScreen"
+            android:label="@string/tableCalculation" >
+        </activity>
+        
+        <activity
+            android:name="com.koylubaevnt.praytimes.alarm.AlarmManagerScreen"
+            android:label="@string/alarmManager" >
+        </activity>
+        
+        <receiver 
+            android:name="com.koylubaevnt.praytimes.alarm.AlarmManagerBroadcastReceiver">
+        </receiver>
     </application>
 
 </manifest>

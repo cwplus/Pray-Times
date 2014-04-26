@@ -2,10 +2,9 @@
     <!--  Пункты меню настроек -->
     <string name="preferencesCalculation">Settings for calculation</string>
 	<string name="preferencesAlarm">Settings for alarm</string>
-    <string name="preferencesHeader">Settings for alarm</string>
+    <string name="preferencesHeader">Settings for alarm (header)</string>
     
-    <string name="pref_ringtone_none">None</string>
-	<!-- Ключи настроек "Расчета" -->
+    <!-- Ключи настроек "Расчета" -->
     <string name="keyMethod">METHOD</string>
     <string name="keyUseGPS">USE_GPS</string>
     <string name="keyLongitude">LONGITUDE</string>
@@ -17,6 +16,7 @@
     <!-- Ключи настроек "Расчета" -->
     
     <!-- Наименования настроек "Расчета" -->
+    <string name="Method">Method</string>
     <string name="MethodCalc">Calculation method</string>
     <string name="UseGPS">Use GPS</string>
     <string name="Yes">Yes</string>
@@ -74,6 +74,8 @@
     <!-- Ключи настроек "Будильника" -->
     
     <!-- Наименования настроек "Будильника" -->
+    <string name="pref_ringtone_none">None</string>
+    
     <string name="UseAlarmBefore">Use alarm before</string>
     <string name="AlarmBefore">Alarm before</string>
     <string name="Alarm">Alarm</string>

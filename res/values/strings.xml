@@ -2,9 +2,18 @@
 <resources>
     <!-- Наименование приложения -->
     <string name="app_name">PrayTimes</string>
-
-    <string name="Method">Method</string>
     
+    <string name="qiblaLocator">Qibla Locator</string>
     
-    
+    <string name="tableCalculation">Table of calc</string>
+    <string name="alarmManager">Alarm Manager</string>
+        
+    <string name="btCancel">Cancel Repeating Timer</string>
+	<string name="btStart">Start Repeating Timer</string>
+	<string name="btOneTime">One-time Timer</string>
+	
+	<string name="btCalc">Calculation</string>
+	<string name="tvCalc">---</string>
+	
+	
 </resources>
