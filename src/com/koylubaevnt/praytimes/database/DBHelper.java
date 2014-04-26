@@ -1,16 +1,38 @@
 package com.koylubaevnt.praytimes.database;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
-	// Your local name for the schema
+		private static final String DB_NAME = "my_db";
+		private static final int DB_VERSION = 1;	
+		public static final String MYTABLE = "mytable"; 
+	    public static final String KEY_ID = "id"; 
+	    public static final String TAX = "tax"; 
+	    public static final String PREV = "prev"; 
+	    public static final String CURR = "curr"; 
+	 
+	    public DBHelper(Context context) {
+			super(context, DB_NAME, null, DB_VERSION);
+		}
+
+	    @Override
+	    public void onCreate(SQLiteDatabase db) {
+
+	        //Здесь важно чтобы строка была форматированная; 
+	        String query = String.format ( "CREATE TABLE %s ( %s INTEGER PRIMARY KEY, %s TEXT, %s TEXT, %s TEXT);", MYTABLE, KEY_ID, TAX, PREV, CURR);
+	  
+	        db.execSQL(query);//Создание заданной таблицы в базе;
+	    }
+
+	    @Override
+	    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	        db.execSQL("DROP TABLE IF EXISTS " + MYTABLE); 
+	        onCreate(db);
+	    }
+		/*
+	    // Your local name for the schema
 		private static final String DB_NAME = "my_db";
 		// Current version (you need to handle upgrades to this version in onUpgrade)
 		private static final int DB_VERSION = 1;	
@@ -19,10 +41,10 @@ public class DBHelper extends SQLiteOpenHelper {
 			super(context, DB_NAME, null, DB_VERSION);
 		}
 
-		/**
+		**
 		 * Creates any of our tables.
 		 * This function is only run once or after every Clear Data
-		 */
+		 *
 		@Override
 		public void onCreate(SQLiteDatabase database) {
 			try {			
@@ -35,9 +57,9 @@ public class DBHelper extends SQLiteOpenHelper {
 			} catch(Exception e){}
 		}
 
-		/**
+		**
 		 * On open we want to make sure we get rid of the stupid setLocale error
-		 */	
+		 *
 		@Override
 		public void onOpen(SQLiteDatabase database) {
 			if(!database.isOpen()) {
@@ -46,12 +68,12 @@ public class DBHelper extends SQLiteOpenHelper {
 			}
 		}
 
-		/**
+		**
 		 * Handle all database version upgrades
-		 */	
+		 *	
 		@Override
 		public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-			/*
+			*
 			database.beginTransaction();
 			boolean okay = true;
 
@@ -72,12 +94,12 @@ public class DBHelper extends SQLiteOpenHelper {
 			}
 
 			database.endTransaction();
-			*/
+			*
 		}
 
-		/**
+		**
 		 * Check if a table exists. Useful for new table creation in onUpgrade
-		 */	
+		 *	
 		private boolean checkTable(SQLiteDatabase pDatabase, String pTable) {
 			try {
 				Cursor c = pDatabase.query(pTable, null, null, null, null, null, null);
@@ -91,12 +113,12 @@ public class DBHelper extends SQLiteOpenHelper {
 			return true;
 		}
 
-		/**
+		**
 		 * Return current date as a string
-		 */	
+		 *	
 		public static String getDate() {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 			Date date = new Date();
 			return sdf.format(date);
-		}
+		}*/
 }
