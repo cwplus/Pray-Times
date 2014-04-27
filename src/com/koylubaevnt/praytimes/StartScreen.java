@@ -8,7 +8,10 @@ import com.koylubaevnt.praytimes.preferences.PreferencesCalculationScreen;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.media.Ringtone;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,7 +21,30 @@ import android.widget.TextView;
 public class StartScreen extends Activity implements OnClickListener{
 	TextView tvCalc, tvInfo;
 	Button btCalc;
-	SharedPreferences sp;
+	SharedPreferences settings;
+	
+	//переменные для расчета
+	int methodIndex;
+	boolean useGPS;
+	double longitude;
+	double latitude;
+	double elevation;
+	boolean isAutoTimeZone;
+	double autoTimeZone;
+	double dst;
+	
+	//переменные для будильника
+	boolean useAlarmBefore;
+	int alarmBeforeIndex;
+	Ringtone alarmBeforeRingtone;
+	boolean alarmBeforeUseVibration;
+	boolean useAlarmNow;
+	Ringtone alarmNowRingtone;
+	boolean alarmNowUseVibration;
+	
+	String keyMethod;
+	String keyUseGps;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,16 +55,11 @@ public class StartScreen extends Activity implements OnClickListener{
 		tvCalc = (TextView)findViewById(R.id.tvCalc);
 		btCalc = (Button)findViewById(R.id.btCalc);
 		
-		//Если настроек нет, то предупреждаем пользователя 
-		//и используем настройки по умолчанию
-		sp = getPreferences(MODE_PRIVATE);
+		Resources r = getResources();
+		keyMethod = r.getString(R.string.keyMethod);
+		useGPS = r.getIn
 		
-		//У нас будет 2 вида настроек:
-		//1. Настройки рассчета
-		//2. Настройки будильника
-		
-		//Так же будет компас, для отображения информации о направлении Киблы
-	}
+		}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -61,6 +82,25 @@ public class StartScreen extends Activity implements OnClickListener{
 			//Запускаем расчет
 		}
 		
+	}
+
+	
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+	}
+
+	private void getPreferences(){
+		settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		
+		methodIndex = settings.getInt(, 1);
+		Boolean notif = sp.getBoolean("notif", false);
+		    String address = sp.getString("address", "");
+		    String text = "Notifications are "
+		        + ((notif) ? "enabled, address = " + address : "disabled");
+		    tvInfo.setText(text);
 	}
 
 }
