@@ -28,10 +28,10 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
         Bundle extras = intent.getExtras();
         StringBuilder msgStr = new StringBuilder();
 
-        if(extras != null && extras.getBoolean(ONE_TIME, Boolean.FALSE)){
+        if(/*extras != null &&*/ extras.getBoolean(ONE_TIME, Boolean.FALSE)){
         //провер€ем параметр ONE_TIME, если это одиночный будильник,
         //выводим соответствующее сообщение.
-         msgStr.append("ќдноразовый будильник: ");
+        	msgStr.append("ќдноразовый будильник: ");
         }
         Format formatter = new SimpleDateFormat("hh:mm:ss a");
         msgStr.append(formatter.format(new Date()));
@@ -44,12 +44,17 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 
 	public void SetAlarm(Context context)
     {
+		StringBuilder msgStr = new StringBuilder();
+		Format formatter = new SimpleDateFormat("hh:mm:ss a");
+        msgStr.append(formatter.format(new Date()));
+		Toast.makeText(context, msgStr, Toast.LENGTH_LONG).show();
+		
         AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
         intent.putExtra(ONE_TIME, Boolean.FALSE); //«адаем параметр интента
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
         //”станавливаем интервал срабатывани€ в 5 секунд.
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 5 , pi);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000 * 5, 1000 * 5 , pi);
     }
  
     public void CancelAlarm(Context context)
@@ -61,10 +66,16 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
     }
  
     public void setOnetimeTimer(Context context){
-     AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+    	StringBuilder msgStr = new StringBuilder();
+		Format formatter = new SimpleDateFormat("hh:mm:ss a");
+        msgStr.append(formatter.format(new Date()));
+        Toast.makeText(context, msgStr, Toast.LENGTH_LONG).show();
+        
+        AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
         intent.putExtra(ONE_TIME, Boolean.TRUE); //«адаем параметр интента
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
-        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pi);
+        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5 * 1000, pi);
+        
     }
 }

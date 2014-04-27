@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -31,7 +33,7 @@ public class StartScreen extends Activity implements OnClickListener{
 	double elevation;
 	boolean isAutoTimeZone;
 	double autoTimeZone;
-	double dst;
+	int dstIndex;
 	
 	//переменные для будильника
 	boolean useAlarmBefore;
@@ -44,7 +46,22 @@ public class StartScreen extends Activity implements OnClickListener{
 	
 	String keyMethod;
 	String keyUseGps;
+	String keyLongitude;
+	String keyLatitude;
+	String keyElevation;
+	String keyTimeZone;
+	String keyTimeZoneValue;
+	String keyDST;
 	
+	String keyAlarmBefore;
+	String keyAlarmBeforeList;
+	String keyAlarmBeforeRington;
+	String keyAlarmBeforeVibro;
+	String keyAlarm;
+	String keyAlarmRington;
+	String keyAlarmVibro;
+	
+	StringBuilder sb = new StringBuilder();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +74,21 @@ public class StartScreen extends Activity implements OnClickListener{
 		
 		Resources r = getResources();
 		keyMethod = r.getString(R.string.keyMethod);
-		useGPS = r.getIn
+		keyUseGps = r.getString(R.string.keyUseGPS);
+		keyLongitude = r.getString(R.string.keyLongitude);
+		keyLatitude = r.getString(R.string.keyLatitude);
+		keyElevation = r.getString(R.string.keyElevation);
+		keyTimeZone = r.getString(R.string.keyTimeZone);
+		keyTimeZoneValue = r.getString(R.string.keyTimeZoneValue);
+		keyDST = r.getString(R.string.keyDST);
+	
+		keyAlarmBefore = r.getString(R.string.keyAlarmBefore);
+		keyAlarmBeforeList = r.getString(R.string.keyAlarmBeforeList);
+		keyAlarmBeforeRington = r.getString(R.string.keyAlarmBeforeRington);
+		keyAlarmBeforeVibro = r.getString(R.string.keyAlarmBeforeVibro);
+		keyAlarm = r.getString(R.string.keyAlarm);
+		keyAlarmRington = r.getString(R.string.keyAlarmRington);
+		keyAlarmVibro = r.getString(R.string.keyAlarmVibro);
 		
 		}
 
@@ -89,18 +120,31 @@ public class StartScreen extends Activity implements OnClickListener{
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+		getPreferences();
 	}
 
 	private void getPreferences(){
-		settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		
-		methodIndex = settings.getInt(, 1);
-		Boolean notif = sp.getBoolean("notif", false);
-		    String address = sp.getString("address", "");
-		    String text = "Notifications are "
-		        + ((notif) ? "enabled, address = " + address : "disabled");
-		    tvInfo.setText(text);
+		
+		settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		methodIndex = settings.getInt(keyMethod, 1);
+		useGPS = settings.getBoolean(keyUseGps, true);
+		latitude = settings.getLong(keyLatitude, 0);
+		longitude = settings.getLong(keyLongitude, 0);
+		elevation = settings.getLong(keyElevation, 0);
+		isAutoTimeZone = settings.getBoolean(keyTimeZone, true);
+		autoTimeZone = settings.getLong(keyTimeZoneValue, 0);
+		dstIndex = settings.getInt(keyDST, 1);
+		
+		useAlarmBefore = settings.getBoolean(keyAlarmBefore, false);
+		alarmBeforeIndex = settings.getInt(keyAlarmBeforeList, 1);
+		alarmBeforeRingtone = RingtoneManager.getRingtone(getBaseContext(), Uri.parse(settings.getString(keyAlarmBeforeRington, "DEFAULT_RINGTON_URI")));
+		alarmBeforeUseVibration = settings.getBoolean(keyAlarmBeforeVibro, false);
+		useAlarmNow = settings.getBoolean(keyAlarm, false);
+		alarmNowRingtone = RingtoneManager.getRingtone(getBaseContext(), Uri.parse(settings.getString(keyAlarmRington, "DEFAULT_RINGTON_URI")));;
+		alarmNowUseVibration = settings.getBoolean(keyAlarmVibro, false);
+
+		
 	}
 
 }
