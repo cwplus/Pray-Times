@@ -2,6 +2,7 @@ package com.koylubaevnt.praytimes;
 
 import com.koylubaevnt.praytimes.alarm.AlarmManagerScreen;
 import com.koylubaevnt.praytimes.compas.QiblaLocatorScreen;
+import com.koylubaevnt.praytimes.database.DatabaseActivity;
 import com.koylubaevnt.praytimes.preferences.PreferencesAlarmScreen;
 import com.koylubaevnt.praytimes.preferences.PreferencesCalculationScreen;
 
@@ -104,6 +105,8 @@ public class StartScreen extends Activity implements OnClickListener{
 	    
 	    menu.add(0, 5, 4, getResources().getString(R.string.alarmManager)).setIntent(new Intent(this, AlarmManagerScreen.class));
 
+	    menu.add(0, 6, 5, getResources().getString(R.string.databaseActivity)).setIntent(new Intent(this, DatabaseActivity.class));
+
 	    return super.onCreateOptionsMenu(menu);
 	}
 
@@ -124,8 +127,7 @@ public class StartScreen extends Activity implements OnClickListener{
 	}
 
 	private void getPreferences(){
-		
-		
+		/*		
 		settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		methodIndex = settings.getInt(keyMethod, 1);
 		useGPS = settings.getBoolean(keyUseGps, true);
@@ -143,7 +145,7 @@ public class StartScreen extends Activity implements OnClickListener{
 		useAlarmNow = settings.getBoolean(keyAlarm, false);
 		alarmNowRingtone = RingtoneManager.getRingtone(getBaseContext(), Uri.parse(settings.getString(keyAlarmRington, "DEFAULT_RINGTON_URI")));;
 		alarmNowUseVibration = settings.getBoolean(keyAlarmVibro, false);
-
+*/
 		
 	}
 

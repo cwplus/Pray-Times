@@ -47,7 +47,10 @@
             android:name="com.koylubaevnt.praytimes.alarm.AlarmManagerScreen"
             android:label="@string/alarmManager" >
         </activity>
-        
+        <activity
+            android:name="com.koylubaevnt.praytimes.database.DatabaseActivity"
+            android:label="@string/databaseActivity" >
+        </activity>
         <receiver 
             android:name="com.koylubaevnt.praytimes.alarm.AlarmManagerBroadcastReceiver">
         </receiver>

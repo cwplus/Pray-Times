@@ -7,6 +7,7 @@
     
     <string name="tableCalculation">Table of calc</string>
     <string name="alarmManager">Alarm Manager</string>
+    <string name="databaseActivity">Database Activity</string>
         
     <string name="btCancel">Cancel Repeating Timer</string>
 	<string name="btStart">Start Repeating Timer</string>
