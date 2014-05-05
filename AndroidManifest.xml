@@ -9,6 +9,8 @@
         android:targetSdkVersion="14" />
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -39,7 +41,7 @@
         </activity>
         
         <activity
-            android:name="com.koylubaevnt.praytimes.TableCalculatorScreen"
+            android:name="com.koylubaevnt.praytimes.TableCalculationScreen"
             android:label="@string/tableCalculation" >
         </activity>
         
@@ -48,8 +50,12 @@
             android:label="@string/alarmManager" >
         </activity>
         <activity
-            android:name="com.koylubaevnt.praytimes.database.DatabaseActivity"
-            android:label="@string/databaseActivity" >
+            android:name="com.koylubaevnt.praytimes.gps.GPSScreen"
+            android:label="@string/provider_gps" >
+        </activity>
+        <activity
+            android:name="com.koylubaevnt.praytimes.gps.AndroidGPSTrackingActivity"
+            android:label="@string/activity_gps" >
         </activity>
         <receiver 
             android:name="com.koylubaevnt.praytimes.alarm.AlarmManagerBroadcastReceiver">

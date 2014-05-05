@@ -1,25 +1,43 @@
 package com.koylubaevnt.praytimes.database;
 
+import com.koylubaevnt.praytimes.core.PrayTimes.Time;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 	// TABLE INFORMATTION
-	 public static final String TABLE_MEMBER = "member";
-	 public static final String MEMBER_ID = "_id";
-	 public static final String MEMBER_FIRSTNAME = "firstname";
-	 public static final String MEMBER_LASTNAME = "lastname";
+	 public static final String TABLE_PRAYTIMES = "PrayTimes";
+	 public static final String PRAYTIMES_ID = "_id";
+	 public static final String PRAYTIMES_DATE = "DATE";
+	 public static final String PRAYTIMES_IMSAK = "IMSAK";
+	 public static final String PRAYTIMES_FAJR = "FAJR";
+	 public static final String PRAYTIMES_SUNRISE = "SUNRISE";
+	 public static final String PRAYTIMES_DHUHR = "DHUHR";
+	 public static final String PRAYTIMES_ASR = "ASR";
+	 public static final String PRAYTIMES_SUNSET = "SUNSET";
+	 public static final String PRAYTIMES_MAGHRIB = "MAGHRIB";
+	 public static final String PRAYTIMES_ISHA = "ISHA";
+	 public static final String PRAYTIMES_MIDNIGHT = "MIDNIGHT";
 
 	 // DATABASE INFORMATION
-	 static final String DB_NAME = "MEMBER.DB";
+	 static final String DB_NAME = TABLE_PRAYTIMES + ".DB";
 	 static final int DB_VERSION = 1;
 
 	 // TABLE CREATION STATEMENT
-	 private static final String CREATE_TABLE = "create table " + TABLE_MEMBER
-	   + "(" + MEMBER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-	   + MEMBER_FIRSTNAME + " TEXT NOT NULL ," + MEMBER_LASTNAME
-	   + " TEXT NOT NULL);";
+	 private static final String CREATE_TABLE = "create table " + TABLE_PRAYTIMES
+	   + "(" + PRAYTIMES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+	   + PRAYTIMES_DATE + " REAL NOT NULL ," 
+	   + PRAYTIMES_IMSAK + " REAL NOT NULL ," 
+	   + PRAYTIMES_FAJR + " REAL NOT NULL ,"
+	   + PRAYTIMES_SUNRISE + " REAL NOT NULL ,"
+	   + PRAYTIMES_DHUHR + " REAL NOT NULL ,"
+	   + PRAYTIMES_ASR + " REAL NOT NULL ,"
+	   + PRAYTIMES_SUNSET + " REAL NOT NULL ,"
+	   + PRAYTIMES_MAGHRIB + " REAL NOT NULL ,"
+	   + PRAYTIMES_ISHA + " REAL NOT NULL ," 
+	   + PRAYTIMES_MIDNIGHT + " REAL NOT NULL);";
 
 	 public DBHelper(Context context) {
 	  super(context, DB_NAME, null, DB_VERSION);
@@ -35,7 +53,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	 @Override
 	 public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-	  db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEMBER);
+	  db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRAYTIMES);
 	  onCreate(db);
 
 	 }

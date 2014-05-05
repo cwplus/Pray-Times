@@ -7,7 +7,8 @@
         android:entryValues="@array/methods_index" 
         android:entries="@array/methods_names" 
         android:title="@string/Method"
-        android:defaultValue="0" android:dialogTitle="@string/Method"/>
+        android:defaultValue="0" 
+        android:dialogTitle="@string/Method"/>
     
     <CheckBoxPreference 
     	android:key="@string/keyUseGPS"
@@ -20,16 +21,19 @@
 	    android:key="@string/keyLongitude"
 	    android:title="@string/Longitude"
 	    android:dialogTitle="@string/Longitude" 
+	    android:inputType="number"
 	    android:dependency="@string/keyUseGPS"/>
 	<EditTextPreference 
 	    android:key="@string/keyLatitude"
 	    android:title="@string/Latitude" 
-	    android:dialogTitle="@string/Latitude" 
+	    android:dialogTitle="@string/Latitude"
+	    android:inputType="number" 
 	    android:dependency="@string/keyUseGPS"/>
 	<EditTextPreference 
 	    android:key="@string/keyElevation"
 	    android:title="@string/Elevation" 
-	    android:dialogTitle="@string/Elevation" 
+	    android:dialogTitle="@string/Elevation"
+	    android:inputType="number" 
 	    android:dependency="@string/keyUseGPS"/>
     
 	<CheckBoxPreference 
@@ -44,12 +48,15 @@
 	    android:key="@string/keyTimeZoneValue"
 	    android:title="@string/TimeZone" 
 	    android:dialogTitle="@string/TimeZoneSelect" 
+	    android:inputType="number"
 	    android:dependency="@string/keyTimeZone"/>
 	
     <ListPreference 
         android:title="@string/DST" 
         android:entries="@array/DST_names" 
         android:entryValues="@array/DST_index"
-        android:defaultValue="0" android:key="@string/keyDST" android:dialogTitle="@string/DST"/>
+        android:defaultValue="0" 
+        android:key="@string/keyDST" 
+        android:dialogTitle="@string/DST"/>
 
 </PreferenceScreen>

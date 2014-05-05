@@ -27,21 +27,36 @@ public class SQLController {
   dbhelper.close();
  }
 
- public void insertData(String name, String lname) {
-  // TODO Auto-generated method stub
-  ContentValues cv = new ContentValues();
-  cv.put(DBHelper.MEMBER_FIRSTNAME, name);
-  cv.put(DBHelper.MEMBER_LASTNAME, lname);
-  database.insert(DBHelper.TABLE_MEMBER, null, cv);
+ public void insertData(Long date, Double imsak, Double fajr,
+		 Double sunrise, Double dhuhr, Double asr,
+		 Double sunset, Double maghrib, Double isha,
+		 Double midnight) {
+	ContentValues cv = new ContentValues();
+	cv.put(DBHelper.PRAYTIMES_DATE, date);
+	cv.put(DBHelper.PRAYTIMES_IMSAK, imsak);
+	cv.put(DBHelper.PRAYTIMES_FAJR, fajr);
+	cv.put(DBHelper.PRAYTIMES_SUNRISE, sunrise);
+	cv.put(DBHelper.PRAYTIMES_DHUHR, dhuhr);
+	cv.put(DBHelper.PRAYTIMES_ASR, asr);
+	cv.put(DBHelper.PRAYTIMES_SUNSET, sunset);
+	cv.put(DBHelper.PRAYTIMES_MAGHRIB, maghrib);
+	cv.put(DBHelper.PRAYTIMES_ISHA, isha);
+	cv.put(DBHelper.PRAYTIMES_MIDNIGHT, midnight);
+	database.insert(DBHelper.TABLE_PRAYTIMES, null, cv);
+}
 
- }
-
+ public void deleteAllData() {
+	database.delete(DBHelper.TABLE_PRAYTIMES, null, null);
+}
+ 
  public Cursor readEntry() {
-  // TODO Auto-generated method stub
-  String[] allColumns = new String[] { DBHelper.MEMBER_ID, DBHelper.MEMBER_FIRSTNAME,
-		  DBHelper.MEMBER_LASTNAME };
+  String[] allColumns = new String[] { 
+		  DBHelper.PRAYTIMES_DATE, DBHelper.PRAYTIMES_IMSAK,
+		  DBHelper.PRAYTIMES_FAJR, DBHelper.PRAYTIMES_SUNRISE, DBHelper.PRAYTIMES_DHUHR,
+		  DBHelper.PRAYTIMES_ASR, DBHelper.PRAYTIMES_SUNSET, DBHelper.PRAYTIMES_MAGHRIB,
+		  DBHelper.PRAYTIMES_ISHA, DBHelper.PRAYTIMES_MIDNIGHT};
 
-  Cursor c = database.query(DBHelper.TABLE_MEMBER, allColumns, null, null, null,
+  Cursor c = database.query(DBHelper.TABLE_PRAYTIMES, allColumns, null, null, null,
     null, null);
 
   if (c != null) {

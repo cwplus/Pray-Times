@@ -1,8 +1,23 @@
 package com.koylubaevnt.praytimes;
 
+import java.sql.Date;
+import java.util.GregorianCalendar;
+import java.util.Map;
+
 import com.koylubaevnt.praytimes.alarm.AlarmManagerScreen;
 import com.koylubaevnt.praytimes.compas.QiblaLocatorScreen;
-import com.koylubaevnt.praytimes.database.DatabaseActivity;
+import com.koylubaevnt.praytimes.core.Location;
+import com.koylubaevnt.praytimes.core.Method;
+import com.koylubaevnt.praytimes.core.PrayTimes;
+
+import static com.koylubaevnt.praytimes.core.Configuration.angle;
+import static com.koylubaevnt.praytimes.core.Configuration.minutes;
+
+import com.koylubaevnt.praytimes.core.PrayTimes.Time;
+import com.koylubaevnt.praytimes.core.Util;
+import com.koylubaevnt.praytimes.database.SQLController;
+import com.koylubaevnt.praytimes.gps.AndroidGPSTrackingActivity;
+import com.koylubaevnt.praytimes.gps.GPSScreen;
 import com.koylubaevnt.praytimes.preferences.PreferencesAlarmScreen;
 import com.koylubaevnt.praytimes.preferences.PreferencesCalculationScreen;
 
@@ -25,7 +40,7 @@ public class StartScreen extends Activity implements OnClickListener{
 	TextView tvCalc, tvInfo;
 	Button btCalc;
 	SharedPreferences settings;
-	
+
 	//переменные дл€ расчета
 	int methodIndex;
 	boolean useGPS;
@@ -62,6 +77,8 @@ public class StartScreen extends Activity implements OnClickListener{
 	String keyAlarmRington;
 	String keyAlarmVibro;
 	
+	SQLController sqlcon;
+	 
 	StringBuilder sb = new StringBuilder();
 	
 	@Override
@@ -72,6 +89,9 @@ public class StartScreen extends Activity implements OnClickListener{
 		tvInfo = (TextView)findViewById(R.id.tvInfo);
 		tvCalc = (TextView)findViewById(R.id.tvCalc);
 		btCalc = (Button)findViewById(R.id.btCalc);
+		btCalc.setOnClickListener(this);
+		
+		sqlcon = new SQLController(this);
 		
 		Resources r = getResources();
 		keyMethod = r.getString(R.string.keyMethod);
@@ -82,7 +102,7 @@ public class StartScreen extends Activity implements OnClickListener{
 		keyTimeZone = r.getString(R.string.keyTimeZone);
 		keyTimeZoneValue = r.getString(R.string.keyTimeZoneValue);
 		keyDST = r.getString(R.string.keyDST);
-	
+	/*
 		keyAlarmBefore = r.getString(R.string.keyAlarmBefore);
 		keyAlarmBeforeList = r.getString(R.string.keyAlarmBeforeList);
 		keyAlarmBeforeRington = r.getString(R.string.keyAlarmBeforeRington);
@@ -90,7 +110,7 @@ public class StartScreen extends Activity implements OnClickListener{
 		keyAlarm = r.getString(R.string.keyAlarm);
 		keyAlarmRington = r.getString(R.string.keyAlarmRington);
 		keyAlarmVibro = r.getString(R.string.keyAlarmVibro);
-		
+		*/
 		}
 
 	@Override
@@ -105,7 +125,10 @@ public class StartScreen extends Activity implements OnClickListener{
 	    
 	    menu.add(0, 5, 4, getResources().getString(R.string.alarmManager)).setIntent(new Intent(this, AlarmManagerScreen.class));
 
-	    menu.add(0, 6, 5, getResources().getString(R.string.databaseActivity)).setIntent(new Intent(this, DatabaseActivity.class));
+	    menu.add(0, 6, 5, getResources().getString(R.string.provider_gps)).setIntent(new Intent(this, GPSScreen.class));
+	    
+	    menu.add(0, 6, 5, getResources().getString(R.string.activity_gps)).setIntent(new Intent(this, AndroidGPSTrackingActivity.class));
+	    
 
 	    return super.onCreateOptionsMenu(menu);
 	}
@@ -114,6 +137,53 @@ public class StartScreen extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		if (v.equals(btCalc)){
 			//«апускаем расчет
+			PrayTimes pt = new PrayTimes(Method.ISNA);
+
+            // Adjustments
+            //pt.adjust(Time.FAJR, angle(20));
+            //pt.adjust(Time.DHUHR, minutes(2));
+
+            // Offset tunings
+            //pt.tuneOffset(Time.FAJR, 2);
+
+            // Calculate praytimes
+            Location location = new Location(latitude, longitude, elevation);
+            
+            GregorianCalendar gc = new GregorianCalendar();
+            int lastDay = gc.getActualMaximum(GregorianCalendar.DATE);
+            int i;
+            sqlcon.open();
+            sqlcon.deleteAllData();
+            for (i = 1; i <= lastDay; i++){             
+	            gc.set(gc.get(GregorianCalendar.YEAR), gc.get(GregorianCalendar.MONTH), i);
+            	// Timezone is defined in the calendar
+	            Map<Time, Double> times = pt
+	                    .getTimes(gc, location);
+	            Date today1 = new Date(gc.getTimeInMillis());
+	            sqlcon.insertData(gc.getTimeInMillis(),
+	            		times.get(Time.IMSAK),
+	            		times.get(Time.FAJR),
+	            		times.get(Time.SUNRISE),
+	            		times.get(Time.DHUHR),
+	            		times.get(Time.ASR),
+	            		times.get(Time.SUNSET),
+	            		times.get(Time.MAGHRIB),
+	            		times.get(Time.ISHA),
+	            		times.get(Time.MIDNIGHT)
+	            		);
+	            tvInfo.setText(today1.toString() + " : " +
+	            		Util.toTime24(times.get(Time.IMSAK)) + " - " +
+	            		Util.toTime24(times.get(Time.FAJR)) + " - " +
+	            		Util.toTime24(times.get(Time.SUNRISE)) + " - " +
+	            		Util.toTime24(times.get(Time.DHUHR)) + " - " +
+	            		Util.toTime24(times.get(Time.ASR)) + " - " +
+	            		Util.toTime24(times.get(Time.SUNSET)) + " - " +
+	            		Util.toTime24(times.get(Time.MAGHRIB)) + " - " +
+	            		Util.toTime24(times.get(Time.ISHA)) + " - " +
+	            		Util.toTime24(times.get(Time.MIDNIGHT)));
+			}
+			sqlcon.close();
+        
 		}
 		
 	}
@@ -127,26 +197,33 @@ public class StartScreen extends Activity implements OnClickListener{
 	}
 
 	private void getPreferences(){
-		/*		
 		settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		methodIndex = settings.getInt(keyMethod, 1);
+		methodIndex = Integer.parseInt(settings.getString(keyMethod, "1"));
 		useGPS = settings.getBoolean(keyUseGps, true);
-		latitude = settings.getLong(keyLatitude, 0);
-		longitude = settings.getLong(keyLongitude, 0);
-		elevation = settings.getLong(keyElevation, 0);
+		if (!useGPS) {
+			latitude = Double.parseDouble(settings.getString(keyLatitude, "0"));
+			longitude = Double.parseDouble(settings.getString(keyLongitude, "0"));
+			elevation = Double.parseDouble(settings.getString(keyElevation, "0"));
+		}else
+		{
+			//получить данные с GPS
+		}
 		isAutoTimeZone = settings.getBoolean(keyTimeZone, true);
-		autoTimeZone = settings.getLong(keyTimeZoneValue, 0);
-		dstIndex = settings.getInt(keyDST, 1);
+		if (!useGPS) {
+			autoTimeZone = Double.parseDouble(settings.getString(keyTimeZoneValue, "0"));
+		}else{
+			//получить данные с телефона
+		}
+		
+		dstIndex = Integer.parseInt(settings.getString(keyDST, "1"));
 		
 		useAlarmBefore = settings.getBoolean(keyAlarmBefore, false);
-		alarmBeforeIndex = settings.getInt(keyAlarmBeforeList, 1);
+		alarmBeforeIndex = Integer.parseInt(settings.getString(keyAlarmBeforeList, "1"));
 		alarmBeforeRingtone = RingtoneManager.getRingtone(getBaseContext(), Uri.parse(settings.getString(keyAlarmBeforeRington, "DEFAULT_RINGTON_URI")));
 		alarmBeforeUseVibration = settings.getBoolean(keyAlarmBeforeVibro, false);
 		useAlarmNow = settings.getBoolean(keyAlarm, false);
 		alarmNowRingtone = RingtoneManager.getRingtone(getBaseContext(), Uri.parse(settings.getString(keyAlarmRington, "DEFAULT_RINGTON_URI")));;
-		alarmNowUseVibration = settings.getBoolean(keyAlarmVibro, false);
-*/
-		
+		alarmNowUseVibration = settings.getBoolean(keyAlarmVibro, false);		
 	}
 
 }
